@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import { body, validationResult } from "express-validator";
+import { RequestValidationError } from "../errors/request-validation-error";
+import { DatabaseConnectionError } from "../errors/database-connection-error";
 
 const router = express.Router();
 
@@ -17,12 +19,13 @@ router.post(
 
     if (!errors.isEmpty()) {
       // isEmpty method is defined for Result<T = any>
-      return res.status(400).send(errors.array()); // array method is defined for Result<T = any>
+      throw new RequestValidationError(errors.array()); // array method is defined for Result<T = any>
     }
 
     const { email, password } = req.body;
 
     console.log("Creating a user...");
+    throw new DatabaseConnectionError();
 
     res.send({});
   }

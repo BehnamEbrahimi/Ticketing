@@ -1,4 +1,3 @@
-import { RequestValidationError } from "./../errors/request-validation-error";
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 

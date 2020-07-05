@@ -1,7 +1,9 @@
 import express, { Request, Response } from "express";
-import { body, validationResult } from "express-validator";
-import { RequestValidationError } from "../errors/request-validation-error";
-import { DatabaseConnectionError } from "../errors/database-connection-error";
+import { body } from "express-validator";
+
+import { validateRequest } from "./../middlewares/validate-request";
+import { User } from "../models/user";
+import { BadRequestError } from "./../errors/bad-request-error";
 
 const router = express.Router();
 
@@ -12,22 +14,25 @@ router.post(
     body("password")
       .trim()
       .isLength({ min: 4, max: 20 })
-      .withMessage("Password must be between 4 and 20 characters"),
+      .withMessage("Password must be between 4 and 20 characters"), // These middlewares append the errors on request object and the next middleware can pull that info off.
   ],
-  (req: Request, res: Response) => {
-    const errors = validationResult(req); // The above middlewares append the errors on request object and this function can pull that info off.
-
-    if (!errors.isEmpty()) {
-      // isEmpty method is defined for Result<T = any>
-      throw new RequestValidationError(errors.array()); // array method is defined for Result<T = any>
-    }
-
+  validateRequest,
+  async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
-    console.log("Creating a user...");
-    throw new DatabaseConnectionError();
+    const userInDb = await User.findOne({ email });
 
-    res.send({});
+    if (userInDb) {
+      throw new BadRequestError("Email in use");
+    }
+
+    const user = User.build({ email, password });
+    await user.save();
+
+    const token = user.generateAuthToken();
+    req.session = { jwt: token };
+
+    res.status(201).send(user);
   }
 );
 

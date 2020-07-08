@@ -1,10 +1,9 @@
 import express, { Request, Response } from "express";
 import { body } from "express-validator";
+import { validateRequest, BadRequestError } from "@betickets/common";
 
 import { PasswordManager } from "../utils/password-manager";
 import { User } from "../models/user";
-import { validateRequest } from "./../middlewares/validate-request";
-import { BadRequestError } from "../errors/bad-request-error";
 
 const router = express.Router();
 

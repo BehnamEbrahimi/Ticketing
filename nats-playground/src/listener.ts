@@ -1,5 +1,6 @@
-import nats, { Message } from "node-nats-streaming";
+import nats from "node-nats-streaming";
 import { randomBytes } from "crypto";
+import { TicketCreatedListener } from "./events/ticket-created-listener";
 
 console.clear();
 
@@ -15,31 +16,7 @@ stan.on("connect", () => {
     process.exit();
   });
 
-  const options = stan
-    .subscriptionOptions()
-    .setManualAckMode(true)
-    .setDeliverAllAvailable()
-    .setDurableName("orders-service");
-
-  const subscription = stan.subscribe(
-    "ticket:created",
-    "orders-service-queue-group",
-    options
-  );
-
-  subscription.on("message", (msg: Message) => {
-    console.log("Message recieved");
-    console.log(msg.getSubject()); // ticket:created
-    console.log(msg.getSequence()); // Returns the sequence number of the message in the stream. The first message in the channel is 1 and so on...
-    console.log(msg.getData()); // {"id":"123","title":"concert","price":20}
-
-    const data = msg.getData();
-    if (typeof data === "string") {
-      console.log(`Received event #${msg.getSequence()}, with data: ${data}`);
-    }
-
-    msg.ack();
-  });
+  new TicketCreatedListener(stan).listen();
 });
 
 process.on("SIGINT", () => stan.close()); // Interruption signal

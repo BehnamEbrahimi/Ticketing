@@ -10,6 +10,8 @@ declare global {
   }
 }
 
+jest.mock("../nats-client"); // jest understands that we want to mock this file so jest redirects the import from this file.
+
 let mongo: MongoMemoryServer;
 
 beforeAll(async () => {
@@ -25,6 +27,8 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
+  jest.clearAllMocks(); // Because mocks do not get restarted and we don't want them to be polluted by the previous run.
+
   const collections = await mongoose.connection.db.collections();
 
   for (let collection of collections) {

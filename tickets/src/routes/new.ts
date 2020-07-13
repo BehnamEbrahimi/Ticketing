@@ -2,6 +2,9 @@ import express, { Request, Response } from "express";
 import { body } from "express-validator";
 import { requireAuth, validateRequest } from "@betickets/common";
 
+import { TicketCreatedPublisher } from "../events/publishers/ticket-created-publisher";
+import { natsClient } from "./../nats-client";
+
 import { Ticket } from "../models/ticket";
 
 const router = express.Router();
@@ -25,6 +28,12 @@ router.post(
       userId: req.currentUser!.id,
     });
     await ticket.save();
+    await new TicketCreatedPublisher(natsClient.client).publish({
+      id: ticket.id,
+      title: ticket.title, // do not use request body; because we might have sanitization in mongoose.
+      price: ticket.price,
+      userId: ticket.userId,
+    });
 
     res.status(201).send(ticket);
   }

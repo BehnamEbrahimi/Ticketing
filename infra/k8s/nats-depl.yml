@@ -28,7 +28,7 @@ spec:
               "-hbf", # how many times a client can fail to assume being dead and being removed from list of clients
               "2",
               "-SD",
-              "-cid",
+              "-cid", # cluster id
               "ticketing",
             ]
 ---

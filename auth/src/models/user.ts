@@ -21,16 +21,29 @@ interface UserDoc extends Document {
   generateAuthToken(): string;
 }
 
-const userSchema = new Schema({
-  email: {
-    type: String, // It is not TS. It is mongoose.
-    required: true,
+const userSchema = new Schema(
+  {
+    email: {
+      type: String, // It is not TS. It is mongoose.
+      required: true,
+    },
+    password: {
+      type: String,
+      required: true,
+    },
   },
-  password: {
-    type: String,
-    required: true,
-  },
-});
+  {
+    toJSON: {
+      // // if an object has a toJSON method, JS will invoke it instead of stringify-ing the whole object when calling JSON.stringify.
+      transform(doc, ret) {
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+      },
+    },
+  }
+);
 
 userSchema.pre("save", async function (done) {
   // a middleware function implemented in mongoose. It will be executed on a user document before saving to the db.
@@ -47,20 +60,6 @@ userSchema.pre("save", async function (done) {
 userSchema.statics.build = (attrs: UserAttrs) => {
   // To use TS with mongoose, we use this function instead of new User() to create a user.
   return new User(attrs);
-};
-
-userSchema.methods.toJSON = function () {
-  // if an object has a toJSON method, JS will invoke it instead of stringify-ing the whole object when calling JSON.stringify.
-  const user = this;
-  const userObject = user.toObject();
-
-  userObject.id = userObject._id;
-
-  delete userObject._id;
-  delete userObject.password;
-  delete userObject.__v;
-
-  return userObject;
 };
 
 userSchema.methods.generateAuthToken = function () {

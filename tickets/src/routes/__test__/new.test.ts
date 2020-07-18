@@ -1,5 +1,6 @@
-import { natsClient } from "./../../nats-client";
 import request from "supertest";
+
+import { natsClient } from "./../../nats-client";
 import { app } from "../../app";
 import { Ticket } from "../../models/ticket";
 

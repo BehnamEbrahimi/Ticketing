@@ -30,6 +30,7 @@ router.post(
     await ticket.save();
     await new TicketCreatedPublisher(natsClient.client).publish({
       id: ticket.id,
+      version: ticket.version,
       title: ticket.title, // do not use request body; because we might have sanitization in mongoose.
       price: ticket.price,
       userId: ticket.userId,

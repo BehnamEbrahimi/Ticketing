@@ -1,4 +1,5 @@
 import { Document, Model, model, Schema } from "mongoose";
+import { updateIfCurrentPlugin } from "mongoose-update-if-current";
 import { OrderStatus } from "@betickets/common";
 import { TicketDoc } from "./ticket";
 
@@ -10,6 +11,7 @@ interface OrderAttrs {
 }
 
 interface OrderDoc extends Document {
+  version: number;
   userId: string;
   status: OrderStatus;
   expiresAt: Date;
@@ -49,6 +51,9 @@ const orderSchema = new Schema(
     },
   }
 );
+
+orderSchema.set("versionKey", "version");
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);

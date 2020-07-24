@@ -1,0 +1,12 @@
+name: tests
+
+on:
+  pull_request # everytime a PR created, updated or reopened
+
+jobs: # things that we want to do
+  build: # start-up some virtual machines (container)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2 # take all the code
+      - run: cd auth && npm install && npm run test:cli
+     

@@ -8,5 +8,5 @@ jobs: # things that we want to do
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2 # take all the code
-      - run: cd auth && npm install && npm run test:cli
+      - run: cd auth && npm install && npm run test:ci
      

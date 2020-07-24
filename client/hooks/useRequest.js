@@ -4,10 +4,11 @@ import { useState } from "react";
 export default ({ url, method, body, onSuccess }) => {
   const [errors, setErrors] = useState(null);
 
-  const doRequest = async () => {
+  const doRequest = async (args = {}) => {
+    // because some of the things that we want to send in the body might not be clear in the time of setting up useRequest hook. So some will be passed in the doRequest function.
     try {
       setErrors(null);
-      const { data } = await axios[method](url, body); // Relative Url -> because ingress-nginx will route it to correct service.
+      const { data } = await axios[method](url, { ...body, ...args }); // Relative Url -> because ingress-nginx will route it to correct service.
 
       if (onSuccess) {
         return onSuccess(data);

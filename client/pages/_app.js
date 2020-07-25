@@ -15,7 +15,13 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
 
 AppComponent.getInitialProps = async (appContext) => {
   const client = buildClient(appContext.ctx); // info. fetching that is common for all pages.
-  const { data } = await client.get("/api/users/currentuser");
+  //const { data } = await client.get("/api/users/currentuser");
+  const data = {
+    currentUser: {
+        id: "5f1be4c9636208001837d6c0",
+        email: "test@test.com"
+    }
+};
 
   let pageProps = {}; // info. fetching for individual pages.
   if (appContext.Component.getInitialProps) {

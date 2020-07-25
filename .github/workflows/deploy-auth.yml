@@ -18,8 +18,8 @@ jobs:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - run: docker push behnamebrahimi/auth
-      #- uses: digitalocean/action-doctl@v2
-      #  with:
-      #    token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
-      #- run: doctl kubernetes cluster kubeconfig save ticketing
-      #- run: kubectl rollout restart deployment auth-depl
+      - uses: digitalocean/action-doctl@v2 # install doctl inside the container
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }} # authorize doctl to connect to DO. You have to create a new access token in DO dashboard with the name of for example github_access_token.
+      - run: doctl kubernetes cluster kubeconfig save ticketing # shove the context to kubectl
+      - run: kubectl rollout restart deployment auth-depl # kubectl is pre-installed

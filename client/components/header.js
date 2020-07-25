@@ -1,4 +1,4 @@
-import Link from "next/link"; // To use anchor tag in Next JS. We still have to use <a></a> tag in it.
+import Link from "next/link"; //To use anchor tag in Next JS. We still have to use <a></a> tag in it.
 
 export default ({ currentUser }) => {
   const links = [

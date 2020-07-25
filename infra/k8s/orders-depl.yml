@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: orders
-          image: us.gcr.io/ticketing-dev-281906/orders
+          image: behnamebrahimi/orders
           env:
             - name: JWT_KEY
               valueFrom:

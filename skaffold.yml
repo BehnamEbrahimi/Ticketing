@@ -4,13 +4,14 @@ deploy:
   kubectl:
     manifests:
       - ./infra/k8s/*
+      - ./infra/k8s-dev/*
 build:
-  # local:
-  #   push: false
-  googleCloudBuild:
-    projectId: ticketing-dev-281906
+  local:
+    push: false
+  # googleCloudBuild:
+  #   projectId: ticketing-dev-281906
   artifacts:
-    - image: us.gcr.io/ticketing-dev-281906/auth
+    - image: behnamebrahimi/auth
       context: auth
       docker:
         dockerfile: Dockerfile
@@ -18,7 +19,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/ticketing-dev-281906/tickets
+    - image: behnamebrahimi/tickets
       context: tickets
       docker:
         dockerfile: Dockerfile
@@ -26,7 +27,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/ticketing-dev-281906/orders
+    - image: behnamebrahimi/orders
       context: orders
       docker:
         dockerfile: Dockerfile
@@ -34,7 +35,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/ticketing-dev-281906/expiration
+    - image: behnamebrahimi/expiration
       context: expiration
       docker:
         dockerfile: Dockerfile
@@ -42,7 +43,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/ticketing-dev-281906/payments
+    - image: behnamebrahimi/payments
       context: payments
       docker:
         dockerfile: Dockerfile
@@ -50,7 +51,7 @@ build:
         manual:
           - src: "src/**/*.ts"
             dest: .
-    - image: us.gcr.io/ticketing-dev-281906/client
+    - image: behnamebrahimi/client
       context: client
       docker:
         dockerfile: Dockerfile

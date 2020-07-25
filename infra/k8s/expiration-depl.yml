@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: expiration
-          image: us.gcr.io/ticketing-dev-281906/expiration
+          image: behnamebrahimi/expiration
           env:
             - name: REDIS_HOST
               value: expiration-redis-srv

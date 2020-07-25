@@ -15,7 +15,7 @@ app.use(
   cookieSession({
     // this middleware creates a req.session object on the incoming req and any info stored on it will be automatically sent to the user browser and set as a cookie for the follow-up requests.
     signed: false, // so no encryption. JWT is already encrypted.
-    secure: process.env.NODE_ENV !== "test", // Use cookie only if the connection is HTTPS in dev and prod.
+    secure: false, // process.env.NODE_ENV !== "test", // Use cookie only if the connection is HTTPS in dev and prod.
   })
 );
 
